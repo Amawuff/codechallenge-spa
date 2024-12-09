@@ -3,10 +3,9 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from 'react';
 import { createBrowserRouter, RouterProvider } from "react-router";
 import CreateProfilePage from "./pages/CreateProfilePage";
-import EditProfilePage from "./pages/EditProfilePage";
 import LoginPage from "./pages/LoginPage";
 import Root from "./pages/Root";
-import ViewProfilePage from "./pages/ViewProfilePage";
+import ProfilePage from "./pages/ProfilePage";
 import ProfileContext from "./ProfileContext";
 
 
@@ -23,8 +22,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <LoginPage /> },
       { path: "/create-profile", element: <CreateProfilePage /> },
-      { path: "/edit-profile/:uuid", element: <EditProfilePage /> },
-      { path: "/view-profile/:uuid", element: <ViewProfilePage /> },
+      { path: "profile/:uuid", element: <ProfilePage /> },
     ],
   },
 ]);
@@ -39,7 +37,7 @@ export default function App() {
 
   const login = (profileData:string) => {
     setProfile(profileData);
-    setTimeout(logout,60000)
+    setTimeout(logout,600000)// dont forget to change this back
   };
 
   return (

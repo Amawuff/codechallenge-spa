@@ -1,6 +1,6 @@
 import {
   profileEmailExists,
-} from "../utils/storageHelpers";
+} from "./profileHelpers";
 
 //REGEX to make sure email is in a valid format
 export const validEmailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;

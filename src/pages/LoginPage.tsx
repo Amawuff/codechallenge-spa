@@ -4,7 +4,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import ProfileContext from "../ProfileContext";
 
-import { profileLoginMatch } from "../utils/storageHelpers";
+import { profileLoginMatch } from "../utils/profileHelpers";
 import { TUserShort } from "../utils/types";
 
 const LoginPage: React.FC = () => {
@@ -26,7 +26,7 @@ const LoginPage: React.FC = () => {
     }else{
       //found it
       login(profile)
-      navigate(`view-profile/${profile}`) 
+      navigate(`profile/${profile}`) 
 
     }
  

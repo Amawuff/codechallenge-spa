@@ -16,15 +16,25 @@ export const profileEmailExists = (email: string): boolean => {
   return false;
 };
 
-
-export const profileLoginMatch = (user: TUserShort): string| null => {
-    const storedProfiles = getStoredProfiles();
-    for (const key in storedProfiles) {
-      if (storedProfiles[key].email.toLowerCase() === user.email.toLowerCase() &&
+export const profileLoginMatch = (user: TUserShort): string | null => {
+  const storedProfiles = getStoredProfiles();
+  for (const key in storedProfiles) {
+    if (
+      storedProfiles[key].email.toLowerCase() === user.email.toLowerCase() &&
       storedProfiles[key].password === user.password
     ) {
-        return key
-      }
+      return key;
     }
-    return null;
-  };
+  }
+  return null;
+};
+
+export const getProfileByUUID = (uuid: string | undefined) => {
+  const storedProfiles = getStoredProfiles();
+  for (const key in storedProfiles) {
+    if (key === uuid) {
+      return storedProfiles[key];
+    }
+  }
+  return null;
+};

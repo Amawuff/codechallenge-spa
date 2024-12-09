@@ -6,7 +6,7 @@ import { useNavigate } from "react-router";
 import { v4 as uuidv4 } from "uuid";
 
 import { favColors } from "../utils/colors";
-import { getStoredProfiles } from "../utils/storageHelpers";
+import { getStoredProfiles } from "../utils/profileHelpers";
 import { IProfile, IUserDataForm } from "../utils/types";
 import {
   emailValidationRules,
