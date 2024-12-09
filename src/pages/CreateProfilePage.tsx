@@ -1,136 +1,190 @@
-import { getStoredProfilesArray, profileEmailExists } from "../storageHelpers";
-import { Profile } from "../types";
+import { Alert, Box, Button, MenuItem, TextField, Typography } from "@mui/material";
+import { MuiTelInput } from "mui-tel-input";
+import { useState } from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
-import "react-phone-number-input/style.css";
+import { v4 as uuidv4 } from "uuid";
+
+import { favColors } from "../utils/colors";
+import { getStoredProfiles } from "../utils/storageHelpers";
+import { IProfile, IUserDataForm } from "../utils/types";
+import {
+  emailValidationRules,
+  fullNameValidationRules,
+  passwordValidationRules,
+} from "../utils/validations";
 
 const CreateProfilePage: React.FC = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [createSuccess, setCreateSuccess]=useState(false);
   const {
-    register,
     handleSubmit,
-    formState: { errors },
+    watch,
+    formState: { errors, isValid, isSubmitting },
     control,
-  } = useForm<Profile>();
-  const onCreateProfile: SubmitHandler<Profile> = (formData) => {
-    console.log("Data:", formData);
+  } = useForm<IUserDataForm>({ mode: "onBlur" });
 
-    // const newProfile: Profile = {
-    //   email: "joe.buchalter@gmail.com",
-    //   password: "password",
-    //   fullName: " Joe Buchalter",
-    //   phone: "+17347161221",
-    //   color: "orange",
-    // };
-    const storedProfiles = getStoredProfilesArray();
-    storedProfiles.push(formData);
-    localStorage.setItem("profiles", JSON.stringify(storedProfiles));
-    navigate("/");
+  const password = watch("password", "");
+
+  const onCreateProfile: SubmitHandler<IUserDataForm> = (
+    formData: IUserDataForm
+  ) => {
+   
+    const storedProfiles = getStoredProfiles();
+    const newProfileID = uuidv4();
+    const newProfile: IProfile = {};
+    const formattedPhone = formData.phone?.replace(/ /g, "");
+    delete formData.confirm_pass;
+    newProfile[newProfileID] = {
+      ...formData,
+      phone: formattedPhone,
+    };
+
+    const results = { ...storedProfiles, ...newProfile };
+
+    localStorage.setItem("profiles", JSON.stringify(results));
+    setCreateSuccess(true);
+    setTimeout(()=>{navigate("/")},5000)
   };
 
   return (
-    <div>
-      <h2>Create Profile</h2>
+    <Box>
+      <Typography variant="h4" gutterBottom>
+        Create Profile
+      </Typography>
       <form onSubmit={handleSubmit(onCreateProfile)}>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "Invalid email address",
-              },
-              validate: (value) =>
-                !profileEmailExists(value) ||
-                "A profile with this email is already in use (SECURITY!)",
-            })}
-          />
-          {errors.email && <p>{errors.email.message}</p>}
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <p>
-            Requirements: between 10 - 32 letters, numbers, special characters
-            (not a letter or number). There must be at least 2 uppercase, 2
-            numbers and 1 special character.
-          </p>
-          <input
-            id="password"
-            type="password"
-            {...register("password", {
-              required: "Password is required",
-              minLength: {
-                value: 10,
-                message: "Password should be at least 10 characters",
-              },
-              maxLength: {
-                value: 32,
-                message: "Password should be no more than 32 characters",
-              },
-              pattern: {
-                value:
-                  /^(?=(?:.*[A-Z]){2})(?=(?:.*\d){2})(?=(?:.*[@$!%*?&]){1}).*$/,
-                message:
-                  "There must be at least 2 uppercase, 2 numbers and 1 special character.",
-              },
-            })}
-          />
-          {errors.password && <p>{errors.password.message}</p>}
-        </div>
-        <div>
-          <label htmlFor="fullname">Full Name</label>
-          <input
-            id="fullname"
-            type="text"
-            {...register("fullName", {
-              required: "Full name is required",
-              minLength: {
-                value: 3,
-                message: "Full name should be at least 3 characters",
-              },
-            })}
-          />
-          {errors.fullName && <p>{errors.fullName.message}</p>}
-        </div>
-        <div>
-          <label htmlFor="phone">Phone Number</label>
-          <Controller
-            name="phone"
-            control={control}
-            rules={{
-              validate: (value) => isValidPhoneNumber(value || ""),
-            }}
-            render={({ field: { onChange, value } }) => (
-              <PhoneInput
-                value={value}
-                onChange={onChange}
-                defaultCountry="US"
-                id="phone"
-              />
-            )}
-          />
-          {errors.phone && <p>This is not a valid phone number</p>}
-        </div>
-        <label htmlFor="color">Choose your favorite Color:</label>
+        <Controller
+          name="email"
+          defaultValue=""
+          control={control}
+          rules={emailValidationRules}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Email"
+              error={!!errors.email}
+              helperText={errors.email?.message}
+              variant="standard"
+              sx={{ mt: 2 }}
+              fullWidth
+            />
+          )}
+        />
 
-        <select id="color" {...register("color", { required: "Your Favorite Color is required!" })}>
-          <option value="blue">Blue</option>
-          <option value="red">Red</option>
-          <option value="green">Green</option>
-          <option value="yellow">Yellow</option>
-          <option value="purple">Purple</option>
-          <option value="black">Black</option>
-          <option value="orange">Orange</option>
-        </select>
-        {errors.color && <p>{errors.color.message}</p>}
+        <Controller
+          name="password"
+          defaultValue=""
+          control={control}
+          rules={passwordValidationRules}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Password"
+              type="text"
+              error={!!errors.password}
+              helperText={errors.password?.message}
+              variant="standard"
+              sx={{ width: "45%", my: 4 }}
+            />
+          )}
+        />
 
-        <button type="submit">Create Profile</button>
+        <Controller
+          name="confirm_pass"
+          defaultValue=""
+          control={control}
+          rules={{
+            required: "Password confirmation is required",
+            validate: (value) => value === password || "Passwords do not match",
+          }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Confirm Password"
+              type="text"
+              error={!!errors.confirm_pass}
+              helperText={errors.confirm_pass?.message}
+              variant="standard"
+              sx={{ width: "45%", ml: "10%", my: 4 }}
+            />
+          )}
+        />
+        <Controller
+          name="fullName"
+          defaultValue=""
+          control={control}
+          rules={fullNameValidationRules}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Full Name"
+              error={!!errors.fullName}
+              helperText={errors.fullName?.message}
+              variant="standard"
+              fullWidth
+            />
+          )}
+        />
+
+     
+
+        <Controller
+          name="phone"
+          control={control}
+          render={({ field: { ref: fieldRef, value, ...fieldProps } }) => (
+            <MuiTelInput
+              {...fieldProps}
+              label="Phone Number"
+              value={value ?? ""}
+              inputRef={fieldRef}
+              variant="standard"
+              defaultCountry="US"
+              disableDropdown
+              sx={{ width: "45%", my: 4 }}
+            />
+          )}
+        />
+
+        <Controller
+          name="color"
+          control={control}
+          rules={{
+            required: "Favorite Color is required",
+          }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              select
+              value={field.value ?? ""}
+              variant="standard"
+              label="Favorite Color"
+              error={!!errors.color}
+              helperText={errors.color ? errors.color?.message : ""}
+              sx={{ width: "45%", my: 4,  ml: "10%" }}
+            >
+              {favColors.map((value, i) => (
+                <MenuItem key={i} value={value} sx={{ color: value }}>
+                  {value}
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
+        />
+
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 4 }}>
+          <Button
+            type="submit"
+            color="primary"
+            disabled={!isValid || isSubmitting}
+            size="large"
+            variant="contained"
+          >
+            Create
+          </Button>
+        </Box>
       </form>
-    </div>
+      {createSuccess && <Alert variant="filled" severity="success">Profile Successfully Created! Sending you to Log in shortly!</Alert>}
+    </Box>
   );
 };
 

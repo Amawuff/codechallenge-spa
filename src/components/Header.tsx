@@ -1,6 +1,31 @@
-import { Link } from "react-router";
+import { useNavigate } from "react-router";
 
-export default function Header(){
-    return <div> <h1>Header, so cool wow!</h1> <Link to="/create-profile">Create Profile</Link> </div>
+import { AppBar, Box, Toolbar, Button } from "@mui/material";
 
-}
+const Header: React.FC = () => {
+  const navigate = useNavigate();
+
+  return (
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+        <Toolbar>
+          <Box sx={{ flexGrow: 1 }}>
+            <Button size="large" onClick={() => navigate("/")}>
+              Code Challenge SPA
+            </Button>
+          </Box>
+
+          <Button
+            color="inherit"
+            variant="outlined"
+            onClick={() => navigate("create-profile")}
+          >
+            Create Profile
+          </Button>
+        </Toolbar>
+      </AppBar>
+    </Box>
+  );
+};
+
+export default Header;

@@ -1,11 +1,14 @@
+import { Container, Paper } from '@mui/material';
 import { Outlet } from "react-router";
 import Header from "../components/Header";
 
 export default function Root() {
     return(
-        <div>
+        <Container maxWidth="md" >
           <Header />
-          <Outlet />  
-        </div>
+          <Paper sx={{p:4}}>
+          <Outlet />
+          </Paper>  
+        </Container>
     )
 }
