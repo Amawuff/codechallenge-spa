@@ -11,7 +11,7 @@ export const validPasswordRegex =
 
 // VALIDATION RULES:
 // these objects are used by react-hook-form
-export const emailValidationRules = {
+export const uniqueEmailValidationRules = {
   required: "Email is required",
   pattern: {
     value: validEmailRegex,
@@ -20,6 +20,14 @@ export const emailValidationRules = {
   validate: (value:string) =>  !profileEmailExists(value) || "A profile with this email is already in use",
 
 
+};
+
+export const emailValidationRules = {
+  required: "Email is required",
+  pattern: {
+    value: validEmailRegex,
+    message: "Invalid Email address format",
+  },
 };
 
 export const passwordValidationRules = {

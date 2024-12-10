@@ -1,4 +1,4 @@
-import { IProfile, TUserShort } from "./types";
+import { IProfile, TUserShort, IUserDataForm } from "./types";
 
 export const getStoredProfiles = (): IProfile => {
   const storedProfiles = localStorage.getItem("profiles");
@@ -37,4 +37,24 @@ export const getProfileByUUID = (uuid: string | undefined) => {
     }
   }
   return null;
+};
+
+//this can create or edit depending on if the uuid you give it is new or existing
+export const setProfileFromFormData = (
+  formData: IUserDataForm,
+  uuid: string
+): void => {
+  const storedProfiles = getStoredProfiles();
+
+  const newProfile: IProfile = {};
+  const formattedPhone = formData.phone?.replace(/ /g, "");
+  delete formData.confirm_pass;
+  newProfile[uuid] = {
+    ...formData,
+    phone: formattedPhone,
+  };
+
+  const results = { ...storedProfiles, ...newProfile };
+
+  localStorage.setItem("profiles", JSON.stringify(results));
 };
