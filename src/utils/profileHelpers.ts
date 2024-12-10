@@ -68,3 +68,11 @@ export const deleteProfileByUUID = (uuid: string | undefined) => {
   }
   localStorage.setItem("profiles", JSON.stringify(storedProfiles));
 };
+
+export const formatPhoneNumber = (phoneNumber: string): string => {
+  const country = phoneNumber.slice(0, 2);
+  const area = phoneNumber.slice(2, 5);
+  const localStart = phoneNumber.slice(5, 8);
+  const localEnd = phoneNumber.slice(8, 12);
+  return `${country} (${area}) ${localStart}-${localEnd}`;
+};

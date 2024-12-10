@@ -1,6 +1,7 @@
 import { Card, CardContent, Grid2 as Grid, Typography } from "@mui/material";
 import React from "react";
 import { TUserData } from "../../utils/types";
+import { formatPhoneNumber } from "../../utils/profileHelpers";
 
 const View: React.FC<{ profile: TUserData | null }> = ({ profile }) => {
   return (
@@ -9,6 +10,7 @@ const View: React.FC<{ profile: TUserData | null }> = ({ profile }) => {
         <Grid container spacing={2}>
           {Object.entries(profile as object).map(([key, value]) => {
             if (key !== "password") {
+              if(key === "phone"){ value = formatPhoneNumber(value)}
               return (
                 <React.Fragment key={key}>
                   <Grid key={key} size={2}>
