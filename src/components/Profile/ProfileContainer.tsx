@@ -1,16 +1,16 @@
 import {
   Box,
-  Typography,
   FormControlLabel,
-  Switch,
-  Button,
   Grid2 as Grid,
+  Switch,
+  Typography,
 } from "@mui/material";
+import { useState } from "react";
 import { useParams } from "react-router";
 import { getProfileByUUID } from "../../utils/profileHelpers";
-import { useState } from "react";
-import View from "./View";
+import Delete from "./Delete";
 import Edit from "./Edit";
+import View from "./View";
 
 const ProfileContainer: React.FC<{ profileUUID: string }> = ({
   profileUUID,
@@ -38,9 +38,7 @@ const ProfileContainer: React.FC<{ profileUUID: string }> = ({
           </Grid>
 
           <Grid size={3}>
-            <Button variant="contained" color="error">
-              Delete Profile
-            </Button>
+            <Delete uuid={params.uuid as string} />
           </Grid>
         </Grid>
       )}

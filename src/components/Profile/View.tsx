@@ -1,9 +1,8 @@
+import { Card, CardContent, Grid2 as Grid, Typography } from "@mui/material";
 import React from "react";
 import { TUserData } from "../../utils/types";
-import { Card, CardContent, Typography, Grid2 as Grid, } from "@mui/material";
 
 const View: React.FC<{ profile: TUserData | null }> = ({ profile }) => {
-
   return (
     <Card variant="outlined">
       <CardContent>
@@ -11,22 +10,21 @@ const View: React.FC<{ profile: TUserData | null }> = ({ profile }) => {
           {Object.entries(profile as object).map(([key, value]) => {
             if (key !== "password") {
               return (
-                < React.Fragment key={key}  >
-                  <Grid key={key}size={2}>
+                <React.Fragment key={key}>
+                  <Grid key={key} size={2}>
                     <Typography variant="h6">{key}:</Typography>
                   </Grid>
                   <Grid key={value} size={4}>
                     <Typography sx={{ lineHeight: "2" }}>{value}</Typography>
                   </Grid>
                 </React.Fragment>
-              )
+              );
             }
-        })}
-        </Grid>    
+          })}
+        </Grid>
       </CardContent>
     </Card>
-  )
-}
- 
+  );
+};
 
 export default View;

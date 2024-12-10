@@ -3,33 +3,29 @@ import { useContext, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import ProfileContext from "../ProfileContext";
-
 import { profileLoginMatch } from "../utils/profileHelpers";
 import { TUserShort } from "../utils/types";
 
 const LoginPage: React.FC = () => {
-
-  const {login} = useContext(ProfileContext)
+  const { login } = useContext(ProfileContext);
   const navigate = useNavigate();
-  const [noProfile, setNoProfile]=useState(false);
+  const [noProfile, setNoProfile] = useState(false);
   const {
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
     control,
-  } = useForm<TUserShort>({mode:"onBlur"});
+  } = useForm<TUserShort>({ mode: "onBlur" });
 
   const onLogin: SubmitHandler<TUserShort> = (formData) => {
-  const profile = profileLoginMatch(formData);
-    if(profile === null){
+    const profile = profileLoginMatch(formData);
+    if (profile === null) {
       //no match bad username password
-      setNoProfile(true)
-    }else{
+      setNoProfile(true);
+    } else {
       //found it
-      login(profile)
-      navigate(`profile/${profile}`) 
-
+      login(profile);
+      navigate(`profile/${profile}`);
     }
- 
   };
 
   return (
@@ -40,7 +36,7 @@ const LoginPage: React.FC = () => {
       <form onSubmit={handleSubmit(onLogin)}>
         <Controller
           name="email"
-          defaultValue = {''}
+          defaultValue={""}
           control={control}
           rules={{ required: "Email is required" }}
           render={({ field }) => (
@@ -58,7 +54,7 @@ const LoginPage: React.FC = () => {
 
         <Controller
           name="password"
-          defaultValue = {''}
+          defaultValue={""}
           control={control}
           rules={{ required: "Password is required" }}
           render={({ field }) => (
@@ -86,10 +82,13 @@ const LoginPage: React.FC = () => {
           </Button>
         </Box>
       </form>
-      {noProfile && <Alert variant="filled" severity="error">Email or Password incorrect!</Alert>}
+      {noProfile && (
+        <Alert variant="filled" severity="error">
+          Email or Password incorrect!
+        </Alert>
+      )}
     </Box>
   );
-  
 };
 
 export default LoginPage;

@@ -1,13 +1,12 @@
 import { CssBaseline } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useState } from 'react';
+import { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import CreateProfilePage from "./pages/CreateProfilePage";
 import LoginPage from "./pages/LoginPage";
-import Root from "./pages/Root";
 import ProfilePage from "./pages/ProfilePage";
+import Root from "./pages/Root";
 import ProfileContext from "./ProfileContext";
-
 
 const darkTheme = createTheme({
   palette: {
@@ -27,17 +26,15 @@ const router = createBrowserRouter([
   },
 ]);
 export default function App() {
+  const [profile, setProfile] = useState<string | null>(null);
 
-  const [profile, setProfile] = useState<string | null>(null)
-
- 
   const logout = () => {
     setProfile(null);
   };
 
-  const login = (profileData:string) => {
+  const login = (profileData: string) => {
     setProfile(profileData);
-    setTimeout(logout,600000)// dont forget to change this back
+    setTimeout(logout, 60000); //one minute
   };
 
   return (

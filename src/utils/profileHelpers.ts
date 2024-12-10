@@ -58,3 +58,13 @@ export const setProfileFromFormData = (
 
   localStorage.setItem("profiles", JSON.stringify(results));
 };
+
+export const deleteProfileByUUID = (uuid: string | undefined) => {
+  const storedProfiles = getStoredProfiles();
+  for (const key in storedProfiles) {
+    if (key === uuid) {
+      delete storedProfiles[key];
+    }
+  }
+  localStorage.setItem("profiles", JSON.stringify(storedProfiles));
+};

@@ -1,6 +1,4 @@
-import {
-  profileEmailExists,
-} from "./profileHelpers";
+import { profileEmailExists } from "./profileHelpers";
 
 //REGEX to make sure email is in a valid format
 export const validEmailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -17,9 +15,8 @@ export const uniqueEmailValidationRules = {
     value: validEmailRegex,
     message: "Invalid Email address format",
   },
-  validate: (value:string) =>  !profileEmailExists(value) || "A profile with this email is already in use",
-
-
+  validate: (value: string) =>
+    !profileEmailExists(value) || "A profile with this email is already in use",
 };
 
 export const emailValidationRules = {
@@ -47,10 +44,10 @@ export const passwordValidationRules = {
   },
 };
 
-export const fullNameValidationRules ={
+export const fullNameValidationRules = {
   required: "Full name is required",
   minLength: {
     value: 3,
     message: "Full name should be at least 3 characters",
   },
-}
+};

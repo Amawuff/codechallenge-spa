@@ -1,54 +1,73 @@
 import { Box, Button, MenuItem, TextField } from "@mui/material";
 import { MuiTelInput } from "mui-tel-input";
-
+import { useEffect } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { IUserDataForm } from "../../utils/types";
-
 import { favColors } from "../../utils/colors";
+import { IUserDataForm, TUserData } from "../../utils/types";
 import {
   emailValidationRules,
   fullNameValidationRules,
   passwordValidationRules,
   uniqueEmailValidationRules,
 } from "../../utils/validations";
-import { TUserData } from "../../utils/types";
-import { useEffect } from "react";
 
 interface SharedFormProps {
   onSubmit: SubmitHandler<IUserDataForm>;
-  defaults?: TUserData|null
-  uniqueEmail?: boolean
+  defaults?: TUserData | null;
+  uniqueEmail?: boolean;
 }
 
-const SharedForm: React.FC<SharedFormProps> = ({ onSubmit, defaults, uniqueEmail }) => {
+const SharedForm: React.FC<SharedFormProps> = ({
+  onSubmit,
+  defaults,
+  uniqueEmail,
+}) => {
   const {
     handleSubmit,
     watch,
-    formState: { errors, isValid, isSubmitting,},
+    formState: { errors, isValid, isSubmitting },
     setValue,
-    control
+    control,
   } = useForm<IUserDataForm>({
     mode: "onBlur",
-    defaultValues:{
+    defaultValues: {
       email: "",
       password: "",
       confirm_pass: "",
-      phone:"",
+      phone: "",
       color: "blue",
       fullName: "",
     },
   });
 
-  useEffect(()=>{
-    if(defaults){
-       setValue("email", defaults.email,{shouldValidate:false, shouldTouch:true})
-       setValue("password", defaults.password,{shouldValidate:false, shouldTouch:true})
-       setValue("confirm_pass",defaults.password,{shouldValidate:false, shouldTouch:true})
-       setValue("fullName", defaults.fullName,{shouldValidate:false, shouldTouch:true})
-       setValue("color",defaults.color,{shouldValidate:false, shouldTouch:true})
-       setValue("phone", defaults.phone,{shouldValidate:false, shouldTouch:true})
-    }   
-  },[defaults,setValue])
+  useEffect(() => {
+    if (defaults) {
+      setValue("email", defaults.email, {
+        shouldValidate: false,
+        shouldTouch: true,
+      });
+      setValue("password", defaults.password, {
+        shouldValidate: false,
+        shouldTouch: true,
+      });
+      setValue("confirm_pass", defaults.password, {
+        shouldValidate: false,
+        shouldTouch: true,
+      });
+      setValue("fullName", defaults.fullName, {
+        shouldValidate: false,
+        shouldTouch: true,
+      });
+      setValue("color", defaults.color, {
+        shouldValidate: false,
+        shouldTouch: true,
+      });
+      setValue("phone", defaults.phone, {
+        shouldValidate: false,
+        shouldTouch: true,
+      });
+    }
+  }, [defaults, setValue]);
 
   const password = watch("password", "");
 
@@ -58,7 +77,9 @@ const SharedForm: React.FC<SharedFormProps> = ({ onSubmit, defaults, uniqueEmail
         <Controller
           name="email"
           control={control}
-          rules={uniqueEmail?uniqueEmailValidationRules:emailValidationRules}
+          rules={
+            uniqueEmail ? uniqueEmailValidationRules : emailValidationRules
+          }
           render={({ field }) => (
             <TextField
               {...field}

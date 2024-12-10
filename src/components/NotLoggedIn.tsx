@@ -1,10 +1,8 @@
-import { useContext } from "react";
+import { Alert, Box, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router";
-import ProfileContext from "../ProfileContext";
-import { Alert, Button, Typography, Box } from "@mui/material";
 
 const NotLoggedIn: React.FC = () => {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <Box>
       <Alert variant="filled" severity="warning">
@@ -12,14 +10,18 @@ const NotLoggedIn: React.FC = () => {
       </Alert>
 
       <Typography variant="h6" sx={{ mt: 4 }}>
-        Per Requirements we log you out after a minute!
+        Per Requirements your session has ended after one minute!
       </Typography>
-    
-      <Typography>
-      Head back to the Homepage to Log In!
-      </Typography>
+
+      <Typography>Head back to the Homepage to Log In!</Typography>
       <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 4 }}>
-        <Button variant="contained" size="large" onClick={()=>{navigate("/")}}>
+        <Button
+          variant="contained"
+          size="large"
+          onClick={() => {
+            navigate("/");
+          }}
+        >
           Take me there
         </Button>
       </Box>
